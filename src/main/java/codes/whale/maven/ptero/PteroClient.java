@@ -73,9 +73,13 @@ public final class PteroClient {
         if (response.statusCode() != 200)
             throw new PterodactylException("Failed to get upload URL: HTTP " + response.statusCode() + " — " + response.body());
 
-        Matcher matcher = UPLOAD_URL_PATTERN.matcher(response.body());
+        return parseUploadUrl(response.body());
+    }
+
+    static @NotNull String parseUploadUrl(@NotNull String responseBody) throws PterodactylException {
+        Matcher matcher = UPLOAD_URL_PATTERN.matcher(responseBody);
         if (!matcher.find())
-            throw new PterodactylException("Could not parse upload URL from response: " + response.body());
+            throw new PterodactylException("Could not parse upload URL from response: " + responseBody);
 
         return matcher.group(1).replace("\\/", "/");
     }
@@ -135,7 +139,7 @@ public final class PteroClient {
     /**
      * Trims the container root prefix and collapses the path to an absolute, slash-separated form.
      */
-    private static @NotNull String normalizeDirectory(@NotNull String directory) {
+    static @NotNull String normalizeDirectory(@NotNull String directory) {
         String normalized = directory.trim().replace('\\', '/');
 
         if (normalized.startsWith(CONTAINER_ROOT))
@@ -148,7 +152,7 @@ public final class PteroClient {
         return normalized.startsWith("/") ? normalized : "/" + normalized;
     }
 
-    private static @NotNull String encodePath(@NotNull String path) {
+    static @NotNull String encodePath(@NotNull String path) {
         return URLEncoder.encode(path, UTF_8)
                 .replace("+", "%20")
                 .replace("%2F", "/");

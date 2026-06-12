@@ -17,7 +17,7 @@ For a full description of the plugin, its goals, and how it is configured, see t
 
 - Java, built with Maven (`<packaging>maven-plugin</packaging>`).
 - Maven Plugin API + plugin annotations (`@Mojo`) for defining goals.
-- ``JetBrains annotations are available as provided dependencies.
+- JetBrains annotations are available as provided dependencies.
 
 ## Guidelines
 
